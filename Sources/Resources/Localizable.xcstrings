@@ -46,17 +46,6 @@
         }
       }
     },
-    "Welcome to Heartthrum": {
-      "extractionState": "manual",
-      "localizations": {
-        "de": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Willkommen bei Heartthrum"
-          }
-        }
-      }
-    },
     "Measure your pulse with your fingertip — right on your iPhone's camera.": {
       "extractionState": "manual",
       "localizations": {
@@ -636,6 +625,17 @@
           "stringUnit": {
             "state": "translated",
             "value": "OK"
+          }
+        }
+      }
+    },
+    "Welcome to Heart thrum": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Willkommen bei Heart thrum"
           }
         }
       }

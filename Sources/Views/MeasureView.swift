@@ -26,7 +26,7 @@ struct MeasureView: View {
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .navigationTitle("Heartthrum")
+            .navigationTitle("Heart thrum")
             .onChange(of: scenePhase) { _, newPhase in
                 if newPhase != .active && (vm.phase == .measuring || vm.phase == .noFinger) {
                     vm.cancel()

@@ -32,9 +32,8 @@ struct RootView: View {
                 .tag(3)
         }
         .tint(.pink)
-        .sheet(isPresented: Binding(get: { !onboarded }, set: { onboarded = !$0 })) {
+        .fullScreenCover(isPresented: Binding(get: { !onboarded }, set: { onboarded = !$0 })) {
             OnboardingView { onboarded = true }
-                .interactiveDismissDisabled()
         }
     }
 }
@@ -48,7 +47,7 @@ struct OnboardingView: View {
             Image(systemName: "heart.fill")
                 .font(.system(size: 72))
                 .foregroundStyle(.pink)
-            Text("Welcome to Heartthrum")
+            Text("Welcome to Heart thrum")
                 .font(.largeTitle.bold())
                 .multilineTextAlignment(.center)
             VStack(alignment: .leading, spacing: 16) {
