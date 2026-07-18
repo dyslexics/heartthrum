@@ -3,10 +3,17 @@ import SwiftData
 
 @main
 struct HeartthrumApp: App {
+    let container: ModelContainer
+
+    init() {
+        container = try! ModelContainer(for: PulseRecord.self)
+        DemoData.seedIfRequested(container: container)
+    }
+
     var body: some Scene {
         WindowGroup {
             RootView()
         }
-        .modelContainer(for: PulseRecord.self)
+        .modelContainer(container)
     }
 }

@@ -2,17 +2,34 @@ import SwiftUI
 
 struct RootView: View {
     @AppStorage("onboarded") private var onboarded = false
+    @State private var selection = 0
+
+    init() {
+        // Screenshot/demo support: "-tab N" jumps to a tab (and skips
+        // onboarding), "-onboarding" forces the welcome sheet.
+        let args = ProcessInfo.processInfo.arguments
+        if let i = args.firstIndex(of: "-tab"), i + 1 < args.count, let t = Int(args[i + 1]) {
+            _selection = State(initialValue: t)
+            UserDefaults.standard.set(true, forKey: "onboarded")
+        } else if args.contains("-onboarding") {
+            UserDefaults.standard.set(false, forKey: "onboarded")
+        }
+    }
 
     var body: some View {
-        TabView {
+        TabView(selection: $selection) {
             MeasureView()
                 .tabItem { Label("Measure", systemImage: "heart.fill") }
+                .tag(0)
             HistoryView()
                 .tabItem { Label("History", systemImage: "chart.xyaxis.line") }
+                .tag(1)
             BreatheView()
                 .tabItem { Label("Breathe", systemImage: "wind") }
+                .tag(2)
             SettingsView()
                 .tabItem { Label("Settings", systemImage: "gearshape") }
+                .tag(3)
         }
         .tint(.pink)
         .sheet(isPresented: Binding(get: { !onboarded }, set: { onboarded = !$0 })) {

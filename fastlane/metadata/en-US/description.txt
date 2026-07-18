@@ -1,0 +1,20 @@
+Heartthrum turns your iPhone into a simple pulse monitor. Place your fingertip on the back camera and see your heart rate in about 40 seconds.
+
+Completely free. No ads. No subscriptions. No in-app purchases. No account. Your data never leaves your device.
+
+MEASURE
+Place your finger on the camera and flash. Heartthrum reads the tiny color changes in your fingertip caused by your heartbeat and shows your pulse with a live waveform.
+
+TRACK YOUR WELL-BEING
+Save each measurement with an optional context (resting, after activity, morning, evening) and how you feel. Follow your trends by day, week, or month.
+
+BREATHE
+Relax with guided breathing at about six breaths per minute. Choose 1, 3, or 5 minutes.
+
+APPLE HEALTH
+If you want, Heartthrum can save your measured heart rate to Apple Health. This is off by default and fully under your control.
+
+PRIVACY FIRST
+Heartthrum collects no data at all. There are no trackers, no analytics, and no network connection. Everything stays on your iPhone.
+
+Important: Heartthrum is not a medical device. Measurements are for wellness and general well-being purposes only and do not replace professional medical advice.

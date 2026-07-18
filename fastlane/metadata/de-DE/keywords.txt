@@ -1,0 +1,1 @@
+puls,herzfrequenz,bpm,herzschlag,wohlbefinden,atmung,entspannung,wellness,messen,gratis
