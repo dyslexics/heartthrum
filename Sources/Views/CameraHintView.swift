@@ -7,8 +7,10 @@ import AVFoundation
 /// so the hint is only shown when a telephoto + ultra-wide exist.
 struct CameraHintView: View {
     static let isTripleCamera: Bool = {
-        AVCaptureDevice.default(.builtInTelephotoCamera, for: .video, position: .back) != nil &&
-            AVCaptureDevice.default(.builtInUltraWideCamera, for: .video, position: .back) != nil
+        // "-forceLensHint" is a screenshot/demo hook (simulator has no cameras)
+        ProcessInfo.processInfo.arguments.contains("-forceLensHint") ||
+            (AVCaptureDevice.default(.builtInTelephotoCamera, for: .video, position: .back) != nil &&
+             AVCaptureDevice.default(.builtInUltraWideCamera, for: .video, position: .back) != nil)
     }()
 
     @State private var pulse = false
