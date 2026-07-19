@@ -5,13 +5,26 @@ import AVFoundation
 /// the main wide camera is the BOTTOM-LEFT lens, next to it the flash.
 /// On single/dual-lens phones a fingertip covers everything anyway,
 /// so the hint is only shown when a telephoto + ultra-wide exist.
-struct CameraHintView: View {
-    static let isTripleCamera: Bool = {
+/// Camera hardware info, detected ONCE at app start — never during view
+/// rendering or while a capture session is running.
+enum CameraInfo {
+    static var isTripleCamera = false
+
+    static func detect() {
         // "-forceLensHint" is a screenshot/demo hook (simulator has no cameras)
-        ProcessInfo.processInfo.arguments.contains("-forceLensHint") ||
-            (AVCaptureDevice.default(.builtInTelephotoCamera, for: .video, position: .back) != nil &&
-             AVCaptureDevice.default(.builtInUltraWideCamera, for: .video, position: .back) != nil)
-    }()
+        if ProcessInfo.processInfo.arguments.contains("-forceLensHint") {
+            isTripleCamera = true
+            return
+        }
+        let discovery = AVCaptureDevice.DiscoverySession(
+            deviceTypes: [.builtInTelephotoCamera, .builtInUltraWideCamera],
+            mediaType: .video, position: .back)
+        isTripleCamera = discovery.devices.count >= 2
+    }
+}
+
+struct CameraHintView: View {
+    static var isTripleCamera: Bool { CameraInfo.isTripleCamera }
 
     @State private var pulse = false
 

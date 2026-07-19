@@ -99,7 +99,9 @@ final class CameraManager: NSObject, AVCaptureVideoDataOutputSampleBufferDelegat
         guard let dev = device, dev.hasTorch else { return }
         try? dev.lockForConfiguration()
         if on {
-            try? dev.setTorchModeOn(level: 0.3)
+            if (try? dev.setTorchModeOn(level: 0.3)) == nil {
+                dev.torchMode = .on
+            }
         } else {
             dev.torchMode = .off
         }

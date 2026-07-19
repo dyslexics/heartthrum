@@ -8,6 +8,7 @@ struct HeartthrumApp: App {
     init() {
         container = try! ModelContainer(for: PulseRecord.self)
         DemoData.seedIfRequested(container: container)
+        CameraInfo.detect()
     }
 
     var body: some Scene {
