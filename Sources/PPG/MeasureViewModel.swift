@@ -24,8 +24,6 @@ final class MeasureViewModel {
     var progress: Double = 0
     var waveform: [Double] = []
     var resultBPM: Int?
-    /// TestFlight diagnostics line (frame count + color means) — remove before App Store submission
-    var debugLine: String = "–"
 
     private let camera = CameraManager()
     private let processor = PulseProcessor()
@@ -33,7 +31,6 @@ final class MeasureViewModel {
     private var measureStart: Double?
     private var lastFingerSeen: Double?
     private var exposureLocked = false
-    private var frameCount = 0
     private var demoTask: Task<Void, Never>?
     /// (time, bpm) readings collected during the measurement window
     private var readings: [(Double, Double)] = []
@@ -106,11 +103,6 @@ final class MeasureViewModel {
             guard let self else { return }
             guard self.phase == .noFinger || self.phase == .measuring else { return }
 
-            self.frameCount += 1
-            let dominance = sample.red / max(0.01, max(sample.green, sample.blue))
-            self.debugLine = String(format: "f%d  R %.2f  G %.2f  B %.2f  d%.2f  %@",
-                                    self.frameCount, sample.red, sample.green, sample.blue,
-                                    dominance, out.fingerDetected ? "FINGER✓" : "–")
             self.waveform = out.waveform
             self.quality = out.quality
             self.liveBPM = out.bpm.map { Int($0.rounded()) }

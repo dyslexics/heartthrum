@@ -151,12 +151,6 @@ struct MeasureView: View {
                     .foregroundStyle(vm.quality > 0.6 ? .green : .orange)
             }
 
-            if !MeasureViewModel.isDemo {
-                Text(vm.debugLine)
-                    .font(.system(.caption2, design: .monospaced))
-                    .foregroundStyle(.tertiary)
-            }
-
             Spacer()
             Button("Stop") { vm.cancel() }
                 .buttonStyle(.bordered)
