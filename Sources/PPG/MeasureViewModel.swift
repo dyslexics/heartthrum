@@ -74,9 +74,10 @@ final class MeasureViewModel {
             guard self.phase == .noFinger || self.phase == .measuring else { return }
 
             self.frameCount += 1
-            self.debugLine = String(format: "f%d  R %.2f  G %.2f  B %.2f  %@",
+            let dominance = sample.red / max(0.01, max(sample.green, sample.blue))
+            self.debugLine = String(format: "f%d  R %.2f  G %.2f  B %.2f  d%.2f  %@",
                                     self.frameCount, sample.red, sample.green, sample.blue,
-                                    out.fingerDetected ? "FINGER✓" : "–")
+                                    dominance, out.fingerDetected ? "FINGER✓" : "–")
             self.waveform = out.waveform
             self.quality = out.quality
             self.liveBPM = out.bpm.map { Int($0.rounded()) }

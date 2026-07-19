@@ -2,6 +2,7 @@ import SwiftUI
 import SwiftData
 
 struct MeasureView: View {
+    @Binding var selection: Int
     @State private var vm = MeasureViewModel()
     @Environment(\.modelContext) private var modelContext
     @Environment(\.scenePhase) private var scenePhase
@@ -232,6 +233,7 @@ struct MeasureView: View {
             HealthManager.shared.saveHeartRate(bpm: bpm, date: record.date)
         }
         resetAfterResult()
+        selection = 1   // show the saved measurement in History
     }
 
     private func resetAfterResult() {

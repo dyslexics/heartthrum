@@ -18,7 +18,7 @@ struct RootView: View {
 
     var body: some View {
         TabView(selection: $selection) {
-            MeasureView()
+            MeasureView(selection: $selection)
                 .tabItem { Label("Measure", systemImage: "heart.fill") }
                 .tag(0)
             HistoryView()

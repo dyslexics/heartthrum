@@ -26,8 +26,11 @@ final class PulseProcessor {
     }
 
     func process(_ s: CameraManager.FrameSample) -> Output {
-        // Finger over torch-lit lens: image is dominated by red, blue nearly gone.
-        let fingerDetected = s.red > 0.4 && s.blue < 0.35 && s.red > s.blue * 1.8
+        // Finger over torch-lit lens: red channel clearly dominates.
+        // Ratio-based so it works in darkness AND daylight (ambient light
+        // leaking around the fingertip adds green/blue in bright rooms).
+        let dominance = s.red / max(0.01, max(s.green, s.blue))
+        let fingerDetected = s.red > 0.18 && dominance > 1.35
 
         green.add(time: s.time, value: s.green)
         red.add(time: s.time, value: s.red)
