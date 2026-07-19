@@ -639,6 +639,17 @@
           }
         }
       }
+    },
+    "Use the bottom-left lens (main camera) and the flash.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nutze die untere linke Linse (Hauptkamera) und den Blitz."
+          }
+        }
+      }
     }
   }
 }

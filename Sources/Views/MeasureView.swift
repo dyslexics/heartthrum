@@ -48,6 +48,10 @@ struct MeasureView: View {
                 .font(.title3)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 32)
+            if CameraHintView.isTripleCamera {
+                CameraHintView()
+                    .padding(.top, 4)
+            }
             Spacer()
             Button {
                 vm.start()
@@ -113,9 +117,13 @@ struct MeasureView: View {
             .frame(width: 240, height: 240)
             .padding(.top, 20)
 
-            WaveformView(samples: vm.waveform)
-                .frame(height: 70)
-                .padding(.horizontal)
+            if vm.phase == .noFinger && CameraHintView.isTripleCamera {
+                CameraHintView()
+            } else {
+                WaveformView(samples: vm.waveform)
+                    .frame(height: 70)
+                    .padding(.horizontal)
+            }
 
             if vm.phase == .measuring {
                 Label(vm.quality > 0.6 ? "Good signal" : "Keep your finger still on the camera",
