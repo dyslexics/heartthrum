@@ -45,15 +45,18 @@ struct CameraHintView: View {
                     .scaleEffect(pulse ? 1.15 : 1.0)
                     .opacity(pulse ? 0.4 : 1.0)
                     .offset(x: -35, y: 35)
-                    .animation(.easeInOut(duration: 1.0).repeatForever(autoreverses: true), value: pulse)
 
-                // Fingertip suggestion covering lens + flash
+                // Fingertip suggestion pointing at the correct lens
                 Image(systemName: "hand.point.up.left.fill")
                     .font(.system(size: 30))
                     .foregroundStyle(.pink)
-                    .offset(x: 8, y: 78)
+                    .offset(x: 6, y: 70)
             }
-            .onAppear { pulse = true }
+            .onAppear {
+                withAnimation(.easeInOut(duration: 1.0).repeatForever(autoreverses: true)) {
+                    pulse = true
+                }
+            }
 
             Text("Use the bottom-left lens (main camera) and the flash.")
                 .font(.footnote)

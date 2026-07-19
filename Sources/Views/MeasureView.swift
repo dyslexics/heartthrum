@@ -42,8 +42,11 @@ struct MeasureView: View {
                 .font(.system(size: 90))
                 .foregroundStyle(.pink)
                 .scaleEffect(heartBeat ? 1.08 : 1.0)
-                .animation(.easeInOut(duration: 0.9).repeatForever(autoreverses: true), value: heartBeat)
-                .onAppear { heartBeat = true }
+                .onAppear {
+                    withAnimation(.easeInOut(duration: 0.9).repeatForever(autoreverses: true)) {
+                        heartBeat = true
+                    }
+                }
             Text("Cover the back camera and flash with your fingertip.")
                 .font(.title3)
                 .multilineTextAlignment(.center)
