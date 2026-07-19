@@ -13,6 +13,10 @@ final class MeasureViewModel {
     }
 
     static let measureDuration: Double = 40
+    /// "-demoMeasure": synthetic pulse signal through the real pipeline —
+    /// for simulator demo videos (no camera available there)
+    static let isDemo = ProcessInfo.processInfo.arguments.contains("-demoMeasure")
+    private var duration: Double { Self.isDemo ? 12 : Self.measureDuration }
 
     var phase: Phase = .idle
     var liveBPM: Int?
@@ -30,6 +34,7 @@ final class MeasureViewModel {
     private var lastFingerSeen: Double?
     private var exposureLocked = false
     private var frameCount = 0
+    private var demoTask: Task<Void, Never>?
     /// (time, bpm) readings collected during the measurement window
     private var readings: [(Double, Double)] = []
 
@@ -40,6 +45,16 @@ final class MeasureViewModel {
     }
 
     func start() {
+        if Self.isDemo {
+            processor.reset()
+            readings = []
+            measureStart = nil
+            progress = 0
+            resultBPM = nil
+            phase = .noFinger
+            runDemoSignal()
+            return
+        }
         CameraManager.requestAccess { [weak self] granted in
             guard let self else { return }
             guard granted else {
@@ -57,7 +72,25 @@ final class MeasureViewModel {
         }
     }
 
+    private func runDemoSignal() {
+        demoTask?.cancel()
+        demoTask = Task { [weak self] in
+            var t = 0.0
+            while !Task.isCancelled {
+                try? await Task.sleep(nanoseconds: 33_000_000)
+                t += 1.0 / 30.0
+                let finger = t > 2.5
+                let pulse = sin(2 * .pi * 1.17 * t) + 0.3 * sin(4 * .pi * 1.17 * t)
+                let r = finger ? 0.82 + 0.022 * pulse + Double.random(in: -0.003...0.003) : 0.12
+                self?.handle(CameraManager.FrameSample(time: t, red: r,
+                                                       green: finger ? 0.24 : 0.10,
+                                                       blue: finger ? 0.11 : 0.09))
+            }
+        }
+    }
+
     func cancel() {
+        demoTask?.cancel()
         camera.stop()
         phase = .idle
         progress = 0
@@ -97,8 +130,8 @@ final class MeasureViewModel {
                     self.readings.append((now, bpm))
                 }
                 if let start = self.measureStart {
-                    self.progress = min(1, (now - start) / Self.measureDuration)
-                    if now - start >= Self.measureDuration {
+                    self.progress = min(1, (now - start) / self.duration)
+                    if now - start >= self.duration {
                         self.finish()
                     }
                 }
@@ -117,10 +150,11 @@ final class MeasureViewModel {
     }
 
     private func finish() {
+        demoTask?.cancel()
         camera.stop()
         // Median over the second half of the window — the most stable part.
         guard let start = measureStart else { return }
-        let stable = readings.filter { $0.0 - start > Self.measureDuration * 0.4 }.map { $0.1 }
+        let stable = readings.filter { $0.0 - start > duration * 0.4 }.map { $0.1 }
         let source = stable.count >= 5 ? stable : readings.map { $0.1 }
         guard !source.isEmpty else {
             phase = .noFinger

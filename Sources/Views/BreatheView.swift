@@ -91,6 +91,11 @@ struct BreatheView: View {
                 .padding(.bottom, 24)
             }
             .navigationTitle("Breathe")
+            .onAppear {
+                if ProcessInfo.processInfo.arguments.contains("-demoBreathe") && !running {
+                    start()
+                }
+            }
             .onDisappear { stop() }
         }
     }

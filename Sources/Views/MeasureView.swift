@@ -33,6 +33,21 @@ struct MeasureView: View {
                     vm.cancel()
                 }
             }
+            .onAppear {
+                if MeasureViewModel.isDemo && vm.phase == .idle { vm.start() }
+            }
+            .onChange(of: vm.phase) { _, newPhase in
+                // Demo video: auto-fill tag/mood and save, then jump to History
+                guard MeasureViewModel.isDemo, newPhase == .done else { return }
+                Task { @MainActor in
+                    try? await Task.sleep(for: .seconds(2))
+                    selectedTag = .resting
+                    try? await Task.sleep(for: .seconds(1))
+                    selectedMood = 3
+                    try? await Task.sleep(for: .seconds(1.2))
+                    save()
+                }
+            }
         }
     }
 
@@ -136,9 +151,11 @@ struct MeasureView: View {
                     .foregroundStyle(vm.quality > 0.6 ? .green : .orange)
             }
 
-            Text(vm.debugLine)
-                .font(.system(.caption2, design: .monospaced))
-                .foregroundStyle(.tertiary)
+            if !MeasureViewModel.isDemo {
+                Text(vm.debugLine)
+                    .font(.system(.caption2, design: .monospaced))
+                    .foregroundStyle(.tertiary)
+            }
 
             Spacer()
             Button("Stop") { vm.cancel() }
