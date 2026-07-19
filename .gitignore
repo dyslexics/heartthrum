@@ -2,3 +2,4 @@ Heartthrum.xcodeproj/
 build/
 DerivedData/
 .DS_Store
+fastlane/metadata/review_information/
